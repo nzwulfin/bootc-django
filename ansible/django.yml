@@ -1,0 +1,11 @@
+---
+
+- name: Provision Django app server
+  hosts: web-hosts
+  become: yes
+  become_user: root
+
+  roles:
+    - django
+    - gunicorn
+    - selinux

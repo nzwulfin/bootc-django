@@ -1,0 +1,16 @@
+[Unit]
+Description=Gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=cloud-user
+Group=cloud-user
+WorkingDirectory={{ django_dir }}
+ExecStart={{venv_dir}}/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:gunicorn.sock {{ project_dir }}.wsgi
+
+[Install]
+WantedBy=multi-user.target

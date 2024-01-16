@@ -1,0 +1,6 @@
+policy_module(gunicorn, 1.0)
+
+type gunicorn_t;
+type gunicorn_exec_t;
+init_daemon_domain(gunicorn_t, gunicorn_exec_t)
+permissive gunicorn_t;

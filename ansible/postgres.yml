@@ -1,0 +1,9 @@
+---
+
+- name: Provision PostgreSQL DB server
+  hosts: db-hosts
+  become: yes
+  become_user: root
+
+  roles:
+    - postgres

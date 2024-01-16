@@ -1,0 +1,4 @@
+---
+
+- import_playbook: postgres.yml
+- import_playbook: django.yml

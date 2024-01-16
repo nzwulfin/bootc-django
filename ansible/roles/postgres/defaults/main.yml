@@ -1,0 +1,6 @@
+---
+# defaults file for postgres
+
+db_name: djangoapp
+db_user: djangouser
+db_password: qwer4321

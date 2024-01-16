@@ -1,0 +1,14 @@
+# Example of setting a group of hosts to use Python3
+[web-hosts]
+8beta1.example.com
+
+[db-hosts]
+8beta1.example.com
+
+[rhel8:children]
+web-hosts
+db-hosts
+
+[rhel8:vars]
+ansible_python_interpreter=/usr/libexec/platform-python
+ansible_ssh_user=cloud-user

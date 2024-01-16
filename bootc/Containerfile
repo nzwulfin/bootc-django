@@ -1,0 +1,20 @@
+FROM quay.io/centos-bootc/centos-bootc-dev:stream9
+
+RUN dnf -y python3.11 \
+    python3.11-pip \
+    python3.11-setuptools \
+    nginx \
+    postgresql-server \
+    selinux-policy-devel \
+&& rm /var/log/*.log /var/lib/dnf -rf
+
+# Reuse the app user as the ansible user
+RUN useradd -ms /bin/bash cloud-user -G wheel
+# ADD core.conf /usr/lib/sysusers.d/
+
+# This seems .. poor
+# RUN mkdir -m700 /var/home/cloud-user/.ssh
+ADD id_rsa_localvm.pub /var/home/cloud-user/.ssh
+# RUN chmod 644 /var/home/cloud-user/.ssh/id_rsa_localvm.pub
+
+RUN ostree container commit

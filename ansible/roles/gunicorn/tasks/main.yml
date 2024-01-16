@@ -1,0 +1,30 @@
+---
+# tasks file for gunicorn
+
+- name: Create systemd socket unit
+  template:
+    src: socket.j2
+    dest: /etc/systemd/system/gunicorn.socket
+
+- name: Create systemd service unit
+  template:
+    src: service.j2
+    dest: /etc/systemd/system/gunicorn.service
+
+- name: Enable gunicorn socket activation
+  systemd:
+    name: gunicorn.socket
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Add Nginx site
+  template:
+    src: nginx-site.j2
+    dest: /etc/nginx/conf.d/default.conf
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

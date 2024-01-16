@@ -1,0 +1,48 @@
+---
+# tasks file for selinux
+
+- name: Install policy development tools
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - selinux-policy-devel
+
+- name: Create temp dir
+  file:
+    path: /tmp/selinux
+    state: directory
+    mode: 0755
+
+- name: Copy type enforcement file
+  copy:
+    src: gunicorn.te
+    dest: /tmp/selinux/gunicorn.te
+
+- name: Compile gunicorn policy
+  make:
+    chdir: /tmp/selinux
+    file: /usr/share/selinux/devel/Makefile
+    target: all
+
+- name: Load policy module
+  command: semodule -i /tmp/selinux/gunicorn.pp
+
+- name: Set domains permissive
+  selinux_permissive:
+    name: "{{ item }}"
+    permissive: true
+  with_items:
+    - httpd_t
+
+- name: Label executables
+  command: chcon -t gunicorn_exec_t /srv/djangoapp/django/bin/gunicorn /srv/djangoapp/django/bin/python3.6
+
+- name: Restart services
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - gunicorn.socket
+    - nginx

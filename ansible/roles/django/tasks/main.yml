@@ -1,0 +1,54 @@
+---
+# tasks file for django
+
+# Package install happens at build
+#- name: Install Python3 and Nginx
+#  yum:
+#    name: "{{ packages }}"
+#  vars:
+#    packages:
+#    - python36
+#    - python3-virtualenv
+#    - nginx
+
+- name: Create Django install location
+  file:
+    path: "{{ django_dir }}"
+    owner: cloud-user
+    group: cloud-user
+    state: directory
+
+- block:
+  - name: Install django and gunicorn in virtualenv
+    pip:
+      name: 'django, gunicorn, psycopg2'
+      virtualenv: "{{ venv_dir }}"
+      virtualenv_python: python3.11
+
+  - name: Check if Django is initialized.
+    stat:
+      path: "{{ django_dir }}/manage.py"
+    register: django_config
+
+  - name: Initialize Django
+    command: "{{ venv_dir }}/bin/django-admin startproject {{ project_dir }} {{ django_dir }}"
+    when: not django_config.stat.exists
+
+  - name: Update application settings
+    template:
+      src: settings.py.j2
+      dest: "{{django_dir}}/{{project_dir}}/settings.py"
+
+  - name: Run DB migrations on the app
+    django_manage:
+      command: migrate
+      virtualenv: "{{ venv_dir }}"
+      app_path: "{{ django_dir }}"
+
+  - name: Collect static pages for the app
+    django_manage:
+      command: collectstatic
+      virtualenv: "{{ venv_dir }}"
+      app_path: "{{ django_dir }}"
+  become: yes
+  become_user: cloud-user
