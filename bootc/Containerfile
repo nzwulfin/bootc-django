@@ -13,8 +13,10 @@ RUN useradd -ms /bin/bash cloud-user -G wheel
 # ADD core.conf /usr/lib/sysusers.d/
 
 # This seems .. poor
-# RUN mkdir -m700 /var/home/cloud-user/.ssh
-ADD id_rsa_localvm.pub /var/home/cloud-user/.ssh
-# RUN chmod 644 /var/home/cloud-user/.ssh/id_rsa_localvm.pub
+ADD id_rsa_localvm.pub /var/home/cloud-user/.ssh/
+RUN chmod 700 /var/home/cloud-user/.ssh && \
+chmod 644 /var/home/cloud-user/.ssh/id_rsa_localvm.pub && \
+chown -R cloud-user:cloud-user /var/home/cloud-user
+
 
 RUN ostree container commit
