@@ -16,8 +16,9 @@
   register: pgdata_dir_version
 
 - name: Initialize PostgreSQL
-  command: /usr/bin/postgresql-setup --initdb
+  command: /usr/bin/initdb -D "{{ db_datapath }}"
   when: not pgdata_dir_version.stat.exists
+  become_user: postgres
 
 - name: Update the authentication methods
   template:
