@@ -71,6 +71,7 @@
     db: "{{ db_name }}"
     role: "{{ db_user }}"
     objs: public
+    type: schema
     privs: CREATE
 
 - name: Ensure user does not have unnecessary privileges
