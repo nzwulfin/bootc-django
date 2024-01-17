@@ -38,7 +38,7 @@
     ansible_python_interpreter: /usr/bin/python3
 
 - name: Label executables
-  command: chcon -t gunicorn_exec_t "{{ venv_dir }}/{{ item }}"
+  command: chcon -t gunicorn_exec_t "{{ venv_dir }}/bin/{{ item }}"
   with_items:
     - gunicorn
     - python

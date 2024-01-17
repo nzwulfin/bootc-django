@@ -1,7 +1,6 @@
 ---
 # defaults file for django
-#db_host: localhost
-#db_host: "{{groups['db-hosts'] | first}}"
+db_host: "{{groups['db-hosts'] | first}}"
 db_name: djangoapp
 db_user: djangouser
 db_password: qwer4321
