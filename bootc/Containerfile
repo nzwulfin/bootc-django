@@ -3,6 +3,7 @@ FROM quay.io/centos-bootc/centos-bootc-dev:stream9
 RUN dnf -y install python3.11 \
     python3.11-pip \
     python3.11-setuptools \
+    python3.11-psycopg2 \
     nginx \
     postgresql-server \
     selinux-policy-devel \

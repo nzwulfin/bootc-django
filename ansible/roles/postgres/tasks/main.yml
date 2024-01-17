@@ -12,7 +12,7 @@
 
 - name: Check if PostgreSQL database is initialized.
   stat:
-    path: /var/lib/pgsql/data/PG_VERSION
+    path: "{{ db_datapath }}"/PG_VERSION
   register: pgdata_dir_version
 
 - name: Initialize PostgreSQL
@@ -22,14 +22,14 @@
 - name: Update the authentication methods
   template:
     src: pg_hba.conf.j2
-    dest: /var/lib/pgsql/data/pg_hba.conf
+    dest: "{{ db_datapath }}"/pg_hba.conf
     owner: postgres
     group: postgres
     mode: 0600
 
 - name: Listen on all IPs
   lineinfile:
-    dest: /var/lib/pgsql/data/postgresql.conf
+    dest: "{{ db_datapath }}"/postgresql.conf
     regexp: "^#listen_addresses"
     line: "listen_addresses = '*'"
     state: present
@@ -44,18 +44,18 @@
 - name: Ensure database is created
   become: yes
   become_user: postgres
-  postgresql_db:
+  community.postgresql.postgresql_db:
     name: "{{ db_name }}"
     encoding: 'UTF-8'
-    lc_collate: 'en_US.UTF-8'
-    lc_ctype: 'en_US.UTF-8'
+    #lc_collate: 'en_US.UTF-8'
+    #lc_ctype: 'en_US.UTF-8'
     template: 'template0'
     state: present
 
 - name: Ensure user has access to the database
   become: yes
   become_user: postgres
-  postgresql_user:
+  community.postgresql.postgresql_user:
     db: "{{ db_name }}"
     name: "{{ db_user }}"
     password: "{{ db_password }}"
@@ -66,7 +66,7 @@
 - name: Ensure user does not have unnecessary privileges
   become: yes
   become_user: postgres
-  postgresql_user:
+  community.postgresql.postgresql_user:
     name: "{{ db_user }}"
     role_attr_flags: NOSUPERUSER,NOCREATEDB
     state: present

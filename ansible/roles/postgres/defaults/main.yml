@@ -4,3 +4,4 @@
 db_name: djangoapp
 db_user: djangouser
 db_password: qwer4321
+db_datapath: /var/lib/pgsql/data
