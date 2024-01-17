@@ -12,7 +12,7 @@
 
 - name: Check if PostgreSQL database is initialized.
   stat:
-    path: "{{ db_datapath }}"/PG_VERSION
+    path: "{{ db_datapath }}/PG_VERSION"
   register: pgdata_dir_version
 
 - name: Initialize PostgreSQL
@@ -22,14 +22,14 @@
 - name: Update the authentication methods
   template:
     src: pg_hba.conf.j2
-    dest: "{{ db_datapath }}"/pg_hba.conf
+    dest: "{{ db_datapath }}/pg_hba.conf"
     owner: postgres
     group: postgres
     mode: 0600
 
 - name: Listen on all IPs
   lineinfile:
-    dest: "{{ db_datapath }}"/postgresql.conf
+    dest: "{{ db_datapath }}/postgresql.conf"
     regexp: "^#listen_addresses"
     line: "listen_addresses = '*'"
     state: present
