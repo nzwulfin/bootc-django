@@ -34,9 +34,16 @@
     permissive: true
   with_items:
     - httpd_t
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
 - name: Label executables
-  command: chcon -t gunicorn_exec_t /srv/djangoapp/django/bin/gunicorn /srv/djangoapp/django/bin/python3.6
+  command: chcon -t gunicorn_exec_t "{{ venv_dir }}/{{ item }}"
+  with_items:
+    - gunicorn
+    - python
+    - python3
+    - python3.11
 
 - name: Restart services
   service:

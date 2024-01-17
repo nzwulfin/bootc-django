@@ -21,9 +21,10 @@
 - block:
   - name: Install django and gunicorn in virtualenv
     pip:
-      name: 'django, gunicorn, psycopg2'
+      name: 'django, gunicorn, psycopg'
       virtualenv: "{{ venv_dir }}"
-      virtualenv_python: python3.11
+      virtualenv_command: "/usr/bin/python3.11 -m venv"
+      #virtualenv_python: python3.11
 
   - name: Check if Django is initialized.
     stat:
