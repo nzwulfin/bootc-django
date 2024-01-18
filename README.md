@@ -50,10 +50,24 @@ podman commit atest localhost:5000/bootc-django-conf
 podman push localhost:5000/bootc-django-conf
 ```
 
-If needed you can create any new configs needed for the qcow before running the build, like an interactive user.
+If needed you can create any new configs needed for the qcow before running the build, like the interactive user.  Create the target directory for the image builder artifacts, then run the image builder container. 
 
 ```
+mkdir output
+
 sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json localhost:5000/bootc-django-conf
 ```
 
 Get the QCOW image from the output/qcow directory and import into a KVM environment to test.
+
+**VM Issues**
+
+The services are not enabled on boot in the QCOW image
+Seboolean needs to be set after first boot to allow communication over the unix socket
+
+```
+setsebool -P daemons_enable_cluster_mode true
+
+systemctl enable --now postgresql nginx.service gunicorn.socket
+
+```

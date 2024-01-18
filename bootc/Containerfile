@@ -10,12 +10,5 @@ RUN dnf -y install vim python3 \
     selinux-policy-devel \
 && rm /var/log/*.log /var/lib/dnf -rf
 
-# Reuse the app user as the ansible user
+# Add the application user here, add another in the config.json
 RUN useradd -ms /bin/bash cloud-user -G wheel
-# ADD core.conf /usr/lib/sysusers.d/
-
-# This seems .. poor
-ADD id_rsa_localvm.pub /var/home/cloud-user/.ssh/
-RUN chmod 700 /var/home/cloud-user/.ssh && \
-chmod 644 /var/home/cloud-user/.ssh/id_rsa_localvm.pub && \
-chown -R cloud-user:cloud-user /var/home/cloud-user
