@@ -1,7 +1,7 @@
 ---
 # defaults file for postgres
 
-db_name: djangoapp
+db_name: p
 db_user: djangouser
 db_password: qwer4321
 db_datapath: /var/lib/pgsql/data

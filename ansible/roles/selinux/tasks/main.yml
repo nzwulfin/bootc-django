@@ -28,27 +28,28 @@
 - name: Load policy module
   command: semodule -i /tmp/selinux/gunicorn.pp
 
-- name: Set domains permissive
-  selinux_permissive:
-    name: "{{ item }}"
-    permissive: true
-  with_items:
-    - httpd_t
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-
 - name: Label executables
-  command: chcon -t gunicorn_exec_t "{{ venv_dir }}/bin/{{ item }}"
+  command: chcon -ht gunicorn_exec_t "{{ venv_dir }}/bin/{{ item }}"
   with_items:
     - gunicorn
     - python
     - python3
 
-- name: Restart services
-  service:
-    name: "{{ item }}"
-    state: restarted
-    enabled: yes
-  with_items:
-    - gunicorn.socket
-    - nginx
+#- name: Set domains permissive
+#  selinux_permissive:
+#    name: "{{ item }}"
+#    permissive: true
+#  with_items:
+#    - httpd_t
+#  vars:
+#    ansible_python_interpreter: /usr/bin/python3
+#
+#- name: Restart services
+#  service:
+#    name: "{{ item }}"
+#    state: restarted
+#    enabled: yes
+#  with_items:
+#    - gunicorn.socket
+#    - nginx
+#

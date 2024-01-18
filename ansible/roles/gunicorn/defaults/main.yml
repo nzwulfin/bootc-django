@@ -1,6 +1,6 @@
 ---
 # defaults file for gunicorn
 
-project_dir: djangoapp
+project_dir: django-project
 django_dir: "/var/srv/{{ project_dir }}"
-venv_dir: "{{ django_dir }}/django"
+venv_dir: "{{ django_dir }}/django-venv"
