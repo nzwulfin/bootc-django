@@ -44,12 +44,6 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
-- name: Set cluster socket flag and persist it
-  seboolean:
-    name: daemons_enable_cluster_mode
-    state: yes
-    persistent: yes
-
 - name: Restart services
   service:
     name: "{{ item }}"
