@@ -4,6 +4,6 @@ db_host: "{{groups['db-hosts'] | first}}"
 db_name: djangoapp
 db_user: djangouser
 db_password: qwer4321
-project_dir: djangoproject
-django_dir: "/var/srv/{{ project_dir }}"
+project: djangoapp
+django_dir: /var/srv/django_projects
 venv_dir: "{{ django_dir }}/djangovenv"

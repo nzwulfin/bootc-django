@@ -1,4 +1,4 @@
 ---
 # defaults file for selinux
-django_dir: "/var/srv/{{ project_dir }}"
+django_dir: /var/srv/django_projects
 venv_dir: "{{ django_dir }}/djangovenv"
