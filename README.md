@@ -32,13 +32,13 @@ podman build -t bootc-django-t1 bootc/
 podman run -d --name atest bootc-django-t1 /sbin/init
 ```
 
-Then move into the ansible directory and run the site playbook to make all the config changes to prep this as a deployable django environment ready for an application. The selinux failure is being worked on, but should get autorelabeled and fixed by image builder.
+Run the site playbook to make all the config changes to prep this as a deployable django environment ready for an application. The selinux context setting is being worked on, but should get autorelabeled when built by image builder.
 
 ```
-ansible-playbook -c podman -i inventory.containers site.yml
+ansible-playbook -c podman -i ansible/inventory.containers ansible/site.yml
 ```
 
-Once the playbook completes, we have the container configured for our django standards. We can convert that back to an image, then build our QCOW2 image for use.
+Once the playbook completes, we have the container configured for our django standards. At the moment, this is not working as a local container, only a VM. We can convert that back to an image, then build our QCOW2 image for use.
 
 ```
 podman commit atest localhost:5000/bootc-django-conf
@@ -46,3 +46,5 @@ podman push localhost:5000/bootc-django-conf
 
 sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json localhost:5000/bootc-django-conf
 ```
+
+Get the QCOW image from the output/qcow directory and import into a KVM environment to test.

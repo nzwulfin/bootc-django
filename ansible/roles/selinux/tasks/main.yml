@@ -35,21 +35,20 @@
     - python
     - python3
 
-#- name: Set domains permissive
-#  selinux_permissive:
-#    name: "{{ item }}"
-#    permissive: true
-#  with_items:
-#    - httpd_t
-#  vars:
-#    ansible_python_interpreter: /usr/bin/python3
-#
-#- name: Restart services
-#  service:
-#    name: "{{ item }}"
-#    state: restarted
-#    enabled: yes
-#  with_items:
-#    - gunicorn.socket
-#    - nginx
-#
+- name: Set domains permissive
+  selinux_permissive:
+    name: "{{ item }}"
+    permissive: true
+  with_items:
+    - httpd_t
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+- name: Restart services
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - gunicorn.socket
+    - nginx

@@ -1,7 +1,7 @@
 #FROM quay.io/centos-bootc/centos-bootc-dev:stream9
 FROM quay.io/centos-bootc/fedora-bootc:eln
 
-RUN dnf -y install python3 \
+RUN dnf -y install vim python3 \
     python3-pip \
     python3-setuptools \
     python3-psycopg2 \
