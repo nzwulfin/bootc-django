@@ -25,7 +25,7 @@ ansible-galaxy collection install community.general
 ansible-galaxy collection install community.postgresql
 ```
 
-Once you have the prerequisites, from the root of this repo you can build and run the container
+Once you have the prerequisites, from the root of this repo you can build and run the container. The name should match the ansible inventory list in the inventory.containers file.
 
 ```
 podman build -t bootc-django-t1 bootc/
@@ -61,6 +61,7 @@ sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt
 Get the QCOW image from the output/qcow directory and import into a KVM environment to test.
 
 **VM Issues**
+There are a few 'localhost' hardcoded spots that are workarounds for the current playbooks but probably would raise issues in a production setting
 
 The services are not enabled on boot in the QCOW image
 Seboolean needs to be set after first boot to allow communication over the unix socket
