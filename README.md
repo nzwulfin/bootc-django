@@ -38,12 +38,21 @@ Run the site playbook to make all the config changes to prep this as a deployabl
 ansible-playbook -c podman -i ansible/inventory.containers ansible/site.yml
 ```
 
-Once the playbook completes, we have the container configured for our django standards. At the moment, this is not working as a local container, only a VM. We can convert that back to an image, then build our QCOW2 image for use.
+Once the playbook completes, we have the container configured for our django standards. There aren't any exposed ports in this config, but you can confirm the skeleton is working from a bash shell. We can convert the container back to an image, then build our QCOW2 image for use.
 
 ```
+podman exec -it atest /bin/bash
+bash-5.2# systemctl status nginx postgresql gunicorn.socket
+bash-5.2# curl --unix-socket /run/gunicorn.sock localhost
+
+podman stop atest
 podman commit atest localhost:5000/bootc-django-conf
 podman push localhost:5000/bootc-django-conf
+```
 
+If needed you can create any new configs needed for the qcow before running the build, like an interactive user.
+
+```
 sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json localhost:5000/bootc-django-conf
 ```
 

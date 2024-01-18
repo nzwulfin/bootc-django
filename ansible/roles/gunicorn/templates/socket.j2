@@ -3,6 +3,7 @@ Description=Gunicorn WSGI socket
 
 [Socket]
 ListenStream=/run/gunicorn.sock
+SocketUser=nginx
 
 [Install]
 WantedBy=sockets.target
