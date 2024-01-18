@@ -4,3 +4,6 @@ type gunicorn_t;
 type gunicorn_exec_t;
 init_daemon_domain(gunicorn_t, gunicorn_exec_t)
 permissive gunicorn_t;
+
+#============= init_t ==============
+allow init_t gunicorn_exec_t:lnk_file read;

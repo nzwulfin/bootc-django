@@ -23,8 +23,7 @@
     pip:
       name: 'django, gunicorn, psycopg'
       virtualenv: "{{ venv_dir }}"
-      virtualenv_command: "/usr/bin/python3.11 -m venv"
-      #virtualenv_python: python3.11
+      virtualenv_command: "/usr/bin/python3 -m venv"
 
   - name: Check if Django is initialized.
     stat:
@@ -32,13 +31,13 @@
     register: django_config
 
   - name: Initialize Django
-    command: "{{ venv_dir }}/bin/django-admin startproject {{ project_dir }} {{ django_dir }}"
+    command: "{{ venv_dir }}/bin/django-admin startproject {{ project }} {{ django_dir }}"
     when: not django_config.stat.exists
 
   - name: Update application settings
     template:
       src: settings.py.j2
-      dest: "{{django_dir}}/{{project_dir}}/settings.py"
+      dest: "{{ django_dir }}/{{ project }}/settings.py"
 
   - name: Run DB migrations on the app
     django_manage:

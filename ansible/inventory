@@ -1,8 +1,8 @@
 # Example of setting a group of hosts to use Python3
-[web-hosts]
+[web_hosts]
 8beta1.example.com
 
-[db-hosts]
+[db_hosts]
 8beta1.example.com
 
 [rhel8:children]

@@ -64,6 +64,16 @@
     priv: ALL
     state: present
 
+- name: Ensure user has create privileges to public schema
+  become: yes
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    db: "{{ db_name }}"
+    role: "{{ db_user }}"
+    objs: public
+    type: schema
+    privs: CREATE
+
 - name: Ensure user does not have unnecessary privileges
   become: yes
   become_user: postgres
