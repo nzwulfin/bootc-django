@@ -5,11 +5,7 @@ Use ansible to create a Django 5 environment on top of a bootc based OS with the
 
 The bootc container only contains the OS level mods required for this Django layer to become a functional app environment once configured at run time
 
-**note: the separation of the playbooks is ongoing**
-
-The first set of ansible playbooks contains 'generic' customizations that wire up the django environment according to local standards in prepartion for landing the application later
-
-The second set of ansible playbooks come from a represent run time deployment of the application specific configurations
+The ansible playbooks contain 'generic' customizations that wire up the django environment according to local standards in prepartion for landing an application later
 
 On the **build host** you'll need the following packages:
 * podman
