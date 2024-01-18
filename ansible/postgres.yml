@@ -1,7 +1,7 @@
 ---
 
 - name: Provision PostgreSQL DB server
-  hosts: db-hosts
+  hosts: db_hosts
   become: yes
   become_user: root
 

@@ -1,7 +1,7 @@
 ---
 
 - name: Provision Django app server
-  hosts: web-hosts
+  hosts: web_hosts
   become: yes
   become_user: root
 
