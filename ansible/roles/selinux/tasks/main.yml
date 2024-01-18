@@ -28,8 +28,8 @@
 - name: Load policy module
   command: semodule -i /tmp/selinux/gunicorn.pp
 
-- name: Label executables
-  command: chcon -ht gunicorn_exec_t "{{ venv_dir }}/bin/{{ item }}"
+- name: Set the new context for next relabel
+  command: semanage fcontext -a -t gunicorn_exec_t "{{ venv_dir }}/bin/{{ item }}"
   with_items:
     - gunicorn
     - python

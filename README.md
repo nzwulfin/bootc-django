@@ -5,7 +5,7 @@ Use ansible to create a Django 5 environment on top of a bootc based OS with the
 
 The bootc container only contains the OS level mods required for this Django layer to become a functional app environment once configured at run time
 
-** note: the separation of the playbooks is ongoing **
+**note: the separation of the playbooks is ongoing**
 
 The first set of ansible playbooks contains 'generic' customizations that wire up the django environment according to local standards in prepartion for landing the application later
 
@@ -16,32 +16,33 @@ On the **build host** you'll need the following packages:
 * ansible
 * general, podman, and postgresql ansible collections
 
-'''
+
+```
 sudo dnf install -y podman ansible
 
 ansible-galaxy collection install containers.podman
 ansible-galaxy collection install community.general
 ansible-galaxy collection install community.postgresql
-'''
+```
 
 Once you have the prerequisites, from the root of this repo you can build and run the container
 
-'''
+```
 podman build -t bootc-django-t1 bootc/
 podman run -d --name atest bootc-django-t1 /sbin/init
-'''
+```
 
 Then move into the ansible directory and run the site playbook to make all the config changes to prep this as a deployable django environment ready for an application. The selinux failure is being worked on, but should get autorelabeled and fixed by image builder.
 
-'''
+```
 ansible-playbook -c podman -i inventory.containers site.yml
-'''
+```
 
 Once the playbook completes, we have the container configured for our django standards. We can convert that back to an image, then build our QCOW2 image for use.
 
-'''
+```
 podman commit atest localhost:5000/bootc-django-conf
 podman push localhost:5000/bootc-django-conf
 
 sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json localhost:5000/bootc-django-conf
-'''
+```
