@@ -10,7 +10,7 @@ WorkingDirectory={{ django_dir }}
 ExecStart={{venv_dir}}/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:gunicorn.sock {{ project_dir }}.wsgi
+          --bind unix:gunicorn.sock {{ project }}.wsgi
 
 [Install]
 WantedBy=multi-user.target
