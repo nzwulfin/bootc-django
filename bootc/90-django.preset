@@ -1,0 +1,5 @@
+# enable the supporting services by default
+
+enable nginx.service
+enable postgresql.service
+enable gunicorn.socket
