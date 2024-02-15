@@ -21,11 +21,13 @@ ansible-galaxy collection install community.general
 ansible-galaxy collection install community.postgresql
 ```
 
-We'll also use a local insecure registry to save on network round trips for building later.  You can use any registry container and add it to ```etc/containers/registries.conf``` so it can be used.
+We'll also use a local insecure registry to save on network round trips for building later.  You can use any registry container and add it to ```etc/containers/registries.conf``` so it can be used. 
+
+The address should be available on the network if you'd like to test updating a host as the repository is part of the bootc entry.
 
 ```
 [[registry]]
-location = "localhost:5000"
+location = "192.168.122.88:5000"
 insecure = true
 
 ```
@@ -57,8 +59,8 @@ Convert the configured container to an image, and push it to the local registry 
 
 ```
 podman stop atest
-podman commit atest localhost:5000/bootc-django-conf
-podman push localhost:5000/bootc-django-conf
+podman commit atest bootc-django-conf
+podman push bootc-django-conf 192.168.122.88:5000/bootc-django-conf
 ```
 **To create an importable QCOW image:**
 If needed you can create any new configs needed for the qcow before running the build, like the interactive user.  Create the target directory for the image builder artifacts, then run the image builder container. 
@@ -66,7 +68,7 @@ If needed you can create any new configs needed for the qcow before running the 
 ```
 mkdir output
 
-sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json localhost:5000/bootc-django-conf
+sudo podman run --rm -it --privileged --pull=newer --network=host --security-opt label=type:unconfined_t  -v $(pwd)/config.json:/config.json  -v $(pwd)/output:/output  quay.io/centos-bootc/bootc-image-builder:latest --tls-verify=false --type qcow2   --config /config.json 192.168.122.88:5000/bootc-django-conf
 ```
 
 Get the QCOW image from the output/qcow directory and import into a KVM environment to test.
@@ -75,9 +77,9 @@ Get the QCOW image from the output/qcow directory and import into a KVM environm
 If you need to add an interactive user, you can do it in the kickstart file. Push the image you want to install to a secure registry, then reference that URL in the ostreecontainer line.
 
 ```
-podman push localhost:5000/bootc-django-conf quay.io/mmicene/bootctest
+podman push bootc-django-conf quay.io/mmicene/bootctest
 ```
 
 
 **To make this more portable:**
-There are a few 'localhost' hardcoded spots that are workarounds for the current playbooks but probably would raise issues in a production setting
+There are a few hardcoded IPs that are workarounds for the current playbooks but probably would raise issues in a production setting
