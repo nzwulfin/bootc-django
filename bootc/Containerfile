@@ -11,6 +11,6 @@ RUN dnf -y install vim python3 \
 && rm /var/log/*.log /var/lib/dnf -rf
 
 # Add the application user here, add another in the config.json
-RUN useradd -ms /bin/bash cloud-user -G wheel
+RUN useradd -ms /bin/bash cloud-user -G wheel -p '$1$K4qx88/s$j.QscWIXDCN60loEtMQAF.'
 
 COPY 90-django.preset /usr/lib/systemd/system-preset/
