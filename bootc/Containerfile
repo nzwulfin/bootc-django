@@ -1,5 +1,5 @@
-#FROM quay.io/centos-bootc/centos-bootc-dev:stream9
-FROM quay.io/centos-bootc/fedora-bootc:eln
+FROM quay.io/centos-bootc/centos-bootc:stream9
+
 
 RUN dnf -y install vim python3 \
     python3-pip \
@@ -8,9 +8,13 @@ RUN dnf -y install vim python3 \
     nginx \
     postgresql-server \
     selinux-policy-devel \
-&& rm /var/log/*.log /var/lib/dnf -rf
+&& dnf clean all
+
+RUN rm -vrf /var/run  # https://issues.redhat.com/browse/RHEL-25756
+
+# Add any configs to /etc we will need
+ADD etc etc
 
 # Add the application user here, add another in the config.json
 RUN useradd -ms /bin/bash cloud-user -G wheel -p '$1$K4qx88/s$j.QscWIXDCN60loEtMQAF.'
 
-COPY 90-django.preset /usr/lib/systemd/system-preset/
